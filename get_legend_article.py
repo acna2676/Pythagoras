@@ -5,7 +5,10 @@ import requests
 
 # url = 'https://qiita.com'+'/api/v2/authenticated_user/items'
 
-access_token = ''
+with open('access_token.json') as f:
+    df = json.load(f)
+
+access_token = df['access_token']
 headers = {'Authorization': 'Bearer '+access_token}
 
 for month in ['1', '2', '3', '4', '5', '6', '7', '8']:

@@ -1,12 +1,14 @@
-from flask import Flask, render_template
-import requests
-import json
 import calendar
+import json
 
+import requests
+from flask import Flask, render_template
 
 # url = 'https://qiita.com'+'/api/v2/authenticated_user/items'
+with open('access_token.json') as f:
+    df = json.load(f)
 
-access_token = '38b71e80eb38b29f4c9dfe728b2817121754038c'
+access_token = df['access_token']
 headers = {'Authorization': 'Bearer '+access_token}
 
 selected_articles = []
