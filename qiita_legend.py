@@ -6,7 +6,7 @@ from flask import Flask, render_template
 
 # url = 'https://qiita.com'+'/api/v2/authenticated_user/items'
 
-access_token = ''
+access_token = ''  # commit test
 headers = {'Authorization': 'Bearer '+access_token}
 
 selected_articles = []
