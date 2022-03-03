@@ -1,8 +1,29 @@
 {% extends "layout.html" %} {% block content %}
-<h3>Qiitaの過去記事</h3>
-{% for articles in selected_articles %} {% for article in articles %}
-<li>
-  {{ loop.index }} : {{ article.likes_count }}:
-  <a href="{{ article.url }}">{{ article.title }}</a>
-</li>
-{% endfor %} {% endfor %} {% endblock %}
+<div class="header">
+  <h3>Qiitaの人気記事</h3>
+</div>
+<input id="prev" type="button" value="{{dt_prev_year}} {{dt_prev_month}}<" onclick="location.href='/{{dt_prev_year}}{{dt_prev_month}}'"></input>
+<input id="next" type="button" value=">{{dt_next_year}} {{dt_next_month}}" onclick="location.href='/{{dt_next_year}}{{dt_next_month}}'"></input>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th style="width: 10%;">Index</th>
+      <th style="width: 10%;">LGTM</th>
+      <th>Title</th>
+      <th>CreatedAt</th>
+      <th>UpdatedAt</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for articles in selected_articles %} {% for article in articles %}
+    <tr>
+      <td style="width: 10%;">{{ loop.index }}</td>
+      <td style="width: 10%;">{{ article.likes_count }}</td>
+      <td><a href="{{ article.url }}">{{ article.title }}</a></td>
+      <td>{{ article.created_at }}</td>
+      <td>{{ article.updated_at }}</td>
+    </tr>
+    {% endfor %} {% endfor %} {% endblock %}
+  </tbody>
+</table>
