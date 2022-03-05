@@ -16,7 +16,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for articles in selected_articles %} {% for article in articles %}
+    {% for article in selected_articles %} 
     <tr>
       <td style="width: 10%;">{{ loop.index }}</td>
       <td style="width: 10%;">{{ article.likes_count }}</td>
@@ -24,6 +24,6 @@
       <td>{{ article.created_at }}</td>
       <td>{{ article.updated_at }}</td>
     </tr>
-    {% endfor %} {% endfor %} {% endblock %}
+    {% endfor %} {% endblock %}
   </tbody>
 </table>
