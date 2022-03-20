@@ -40,7 +40,7 @@ def index():
     selected_articles_sorted = []
     for articles in selected_articles:
         for article in articles:
-            item = {"likes_count": article["likes_count"], "title": article["title"], "created_at": article["created_at"], "updated_at": article["updated_at"]}
+            item = {"likes_count": article["likes_count"], "title": article["title"], "created_at": article["created_at"], "updated_at": article["updated_at"], "url": article["url"]}
             item["created_at"] = datetime.datetime.strptime(item["created_at"], '%Y-%m-%dT%H:%M:%S%z').strftime('%Y-%m-%d')
             item["updated_at"] = datetime.datetime.strptime(item["updated_at"], '%Y-%m-%dT%H:%M:%S%z').strftime('%Y-%m-%d')
             selected_articles_formatted.append(item)
@@ -83,9 +83,11 @@ def other(date):
         selected_articles_sorted = []
         for articles in selected_articles:
             for article in articles:
-                item = {"likes_count": article["likes_count"], "title": article["title"], "created_at": article["created_at"], "updated_at": article["updated_at"]}
-                selected_articles_formatted.append(item)
-                selected_articles_sorted = sorted(selected_articles_formatted, key=lambda x: x["likes_count"], reverse=True)
+                item = {"likes_count": article["likes_count"], "title": article["title"], "created_at": article["created_at"], "updated_at": article["updated_at"], "url": article["url"]}
+                item["created_at"] = datetime.datetime.strptime(item["created_at"], '%Y-%m-%dT%H:%M:%S%z').strftime('%Y-%m-%d')
+                item["updated_at"] = datetime.datetime.strptime(item["updated_at"], '%Y-%m-%dT%H:%M:%S%z').strftime('%Y-%m-%d')
+            selected_articles_formatted.append(item)
+            selected_articles_sorted = sorted(selected_articles_formatted, key=lambda x: x["likes_count"], reverse=True)
 
         context = {"selected_articles": selected_articles_sorted,                "dt_prev_year": dt_prev_year,
                    "dt_prev_month": dt_prev_month.zfill(2), "dt_next_year": dt_next_year, "dt_next_month": dt_next_month.zfill(2)}

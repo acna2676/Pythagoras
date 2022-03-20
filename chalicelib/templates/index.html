@@ -1,41 +1,42 @@
 {% extends "layout.html" %} {% block content %}
-<div class="header">
-  <h2>Qiitaの人気記事</h2>
-</div>
+<h2>Qiitaの人気記事</h2>
 <div id="controllButton">
-  <button
+  <input
     id="prev"
     type="button"
     value="{{dt_prev_year}} {{dt_prev_month}}<"
     onclick="location.href='/{{dt_prev_year}}{{dt_prev_month}}'"
-  ></button>
-  <button
+  ></input>
+  <input
     id="next"
     type="button"
     value=">{{dt_next_year}} {{dt_next_month}}"
     onclick="location.href='/{{dt_next_year}}{{dt_next_month}}'"
-  ></button>
+  ></input>
 </div>
 
 <table class="table">
   <thead>
     <tr>
-      <th style="width: 10%">Index</th>
+      <th style="width: 5%">Index</th>
       <th style="width: 10%">LGTM</th>
-      <th>Title</th>
-      <th>CreatedAt</th>
-      <th>UpdatedAt</th>
+      <th style="width: 55%">Title</th>
+      <th style="width: 15%">CreatedAt</th>
+      <th style="width: 15%">UpdatedAt</th>
     </tr>
   </thead>
   <tbody>
     {% for article in selected_articles %}
     <tr>
-      <td style="width: 10%">{{ loop.index }}</td>
-      <td style="width: 10%">{{ article.likes_count }}</td>
-      <td><a href="{{ article.url }}">{{ article.title }}</a></td>
+      <td>{{ loop.index }}</td>
+      <td>{{ article.likes_count }}</td>
+      <td  style="text-align: left">
+        <a href="{{ article.url }}">{{ article.title }}</a>
+      </td>
       <td>{{ article.created_at }}</td>
       <td>{{ article.updated_at }}</td>
     </tr>
-    {% endfor %} {% endblock %}
+    {% endfor %}
   </tbody>
 </table>
+{% endblock %}

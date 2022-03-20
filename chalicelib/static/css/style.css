@@ -1,25 +1,25 @@
-.header {
-  width: 100%;
-  padding: 0.5%;
-  background-color: #55c501;
+body {
+  margin: 0;
+  padding: 0;
 }
 
 h2 {
+  width: 100%;
+  margin: 0;
+  padding: 1%;
+  background-color: #55c501;
   text-align: center;
   color: white;
 }
 
 #controllButton {
   text-align: center;
-  height: 1%;
 }
 
 .table {
-  /* margin-top: 15%; */
-  /* margin-bottom: 15%; */
   margin-left: auto;
   margin-right: auto;
-  color: #3eeeee;
+  color: #55c501;
   border-collapse: collapse;
   border: none;
   border-radius: 5px;
@@ -37,7 +37,7 @@ table th:first-child {
 
 table th:last-child {
   border-radius: 0 5px 0 0;
-  border-right: 1px solid #55c501;
+  /* border-right: 1px solid #55c501; */
 }
 
 table th {
@@ -45,17 +45,15 @@ table th {
   color: white;
   background: #55c501;
   /* box-shadow: 0px 1px 1px rgba(255, 255, 255, 0.3) inset; */
-  width: 25%;
   padding: 10px 0;
 }
 
 table td {
   text-align: center;
-  /* border-left: 1px solid #a8b7c5; */
-  /* border-bottom: 1px solid #a8b7c5; */
+  border-left: 1px solid #a8b7c5;
+  border-bottom: 1px solid #a8b7c5;
   border-top: none;
   /* box-shadow: 0px -3px 5px 1px #eee inset; */
-  width: 25%;
   padding: 10px 0;
 }
 
@@ -64,6 +62,8 @@ table td {
   border-color: #55c501;
   border-radius: 5px;
   background-color: white;
+  margin: 0.5%;
+  padding: 0.5%;
 }
 
 #next {
@@ -71,4 +71,6 @@ table td {
   border-color: #55c501;
   border-radius: 5px;
   background-color: white;
+  margin: 0.5%;
+  padding: 0.5%;
 }
