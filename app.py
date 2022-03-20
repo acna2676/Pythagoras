@@ -3,7 +3,6 @@ import datetime
 import json
 import os
 
-# app = Flask(__name__)
 import jinja2  # import Environment, FileSystemLoader, select_autoescape
 import requests
 from chalice import Chalice, Response
@@ -11,18 +10,11 @@ from dateutil.relativedelta import relativedelta
 
 from chalicelib import API_KEY
 
-# from flask import Flask, render_template
-
 app = Chalice(app_name='qiitank')
 
 
 @app.route('/', methods=["GET"], content_types=["*/*"])
 def index():
-    # url = 'https://qiita.com'+'/api/v2/authenticated_user/items'
-    # with open('access_token.json') as f:
-    #     df = json.load(f)
-
-    # access_token = df['access_token']
     access_token = API_KEY
     headers = {'Authorization': 'Bearer '+access_token}
 
@@ -38,27 +30,25 @@ def index():
     target_month = str(dt_now.month)  # '3'
 
     _, lastday = calendar.monthrange(int(target_year), int(target_month))
-    # print(lastday)
     for page in range(1, 2):
         url = 'https://qiita.com/api/v2/items?page='+str(page)+'&per_page=100&query=created%3A%3E'+target_year+'-'+target_month.zfill(2)+'-01+created%3A%3C'+target_year+'-' + \
-            target_month.zfill(2)+'-'+str(lastday)+'+stocks%3A%3E30'
+            target_month.zfill(2)+'-'+str(lastday)+'+stocks%3A%3E300'
 
         response = requests.get(url, headers=headers)
         selected_articles.append(json.loads(response.text))
-    # print(len(selected_articles))
     selected_articles_formatted = []
     selected_articles_sorted = []
     for articles in selected_articles:
         for article in articles:
             item = {"likes_count": article["likes_count"], "title": article["title"], "created_at": article["created_at"], "updated_at": article["updated_at"]}
+            item["created_at"] = datetime.datetime.strptime(item["created_at"], '%Y-%m-%dT%H:%M:%S%z').strftime('%Y-%m-%d')
+            item["updated_at"] = datetime.datetime.strptime(item["updated_at"], '%Y-%m-%dT%H:%M:%S%z').strftime('%Y-%m-%d')
             selected_articles_formatted.append(item)
             selected_articles_sorted = sorted(selected_articles_formatted, key=lambda x: x["likes_count"], reverse=True)
-    # print(selected_articles_sorted)
-    # return render_template('index.html', title='Qiitank', selected_articles=selected_articles_sorted,                dt_prev_year=dt_prev_year, dt_prev_month=dt_prev_month.zfill(2), dt_next_year=dt_next_year, dt_next_month=dt_next_month.zfill(2))
     context = {"selected_articles": selected_articles_sorted,                "dt_prev_year": dt_prev_year,
                "dt_prev_month": dt_prev_month.zfill(2), "dt_next_year": dt_next_year, "dt_next_month": dt_next_month.zfill(2)}
     template = render("chalicelib/templates/index.html", context)
-    return Response(template, status_code=200, headers={"Content-Type": "text/html", "Access-Control-Allow-Origin": "*"})
+    return Response(template, status_code=200, headers={"Content-Type": "text/html;charset=UTF-8", "Access-Control-Allow-Origin": "*"})
 
 
 @app.route('/{date}', methods=["GET"], content_types=["*/*"])  # /<date>とすると/の場合にもfavicon.icoで実行されてしまうためcreated-atを挟んでいる
@@ -85,7 +75,7 @@ def other(date):
         _, lastday = calendar.monthrange(int(target_year), int(target_month))
         for page in range(1, 2):
             url = 'https://qiita.com/api/v2/items?page='+str(page)+'&per_page=100&query=created%3A%3E'+target_year+'-'+target_month+'-01+created%3A%3C'+target_year+'-' + \
-                target_month+'-'+str(lastday)+'+stocks%3A%3E30'
+                target_month+'-'+str(lastday)+'+stocks%3A%3E300'
 
             response = requests.get(url, headers=headers)
             selected_articles.append(json.loads(response.text))
@@ -97,11 +87,10 @@ def other(date):
                 selected_articles_formatted.append(item)
                 selected_articles_sorted = sorted(selected_articles_formatted, key=lambda x: x["likes_count"], reverse=True)
 
-        # return render_template('index.html', title='Qiitank', selected_articles=selected_articles, dt_prev_year=dt_prev_year, dt_prev_month=dt_prev_month.zfill(2), dt_next_year=dt_next_year, dt_next_month=dt_next_month.zfill(2))
         context = {"selected_articles": selected_articles_sorted,                "dt_prev_year": dt_prev_year,
                    "dt_prev_month": dt_prev_month.zfill(2), "dt_next_year": dt_next_year, "dt_next_month": dt_next_month.zfill(2)}
         template = render("chalicelib/templates/index.html", context)
-        return Response(template, status_code=200, headers={"Content-Type": "text/html", "Access-Control-Allow-Origin": "*"})
+        return Response(template, status_code=200, headers={"Content-Type": "text/html; charset=UTF-8", "Access-Control-Allow-Origin": "*"})
 
 
 def render(tpl_path, context):
@@ -116,7 +105,6 @@ def cssindex():
     return Response(body=data, status_code=200, headers={"Content-Type": "text/css", "Access-Control-Allow-Origin": "*"})
 
 
-# @app.route('/favicon.ico')
 @app.route('/chalicelib/favicon.ico')
 def faviconindex():
     with open('chalicelib/static/favicon.ico', 'rb') as fp:
@@ -128,4 +116,4 @@ if __name__ == "__main__":
     app.run(debug=True, port=8888, threaded=True)
 
 # 実行方法
-# python qiita_legend.py
+# chalice local
