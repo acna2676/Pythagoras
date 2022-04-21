@@ -56,10 +56,8 @@ def other(date):
     if date == 'favicon.ico':
         return index()
     else:
-        with open('access_token.json') as f:
-            df = json.load(f)
+        access_token = API_KEY
 
-        access_token = df['access_token']
         headers = {'Authorization': 'Bearer '+access_token}
 
         selected_articles = []
