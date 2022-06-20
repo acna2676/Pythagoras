@@ -1,2 +1,9 @@
+.chalice/deployments/
+.chalice/venv/
+chalicelib/__init__.py
+
 access_token.txt
+access_token.json
 sample.json
+
+node_modules/
