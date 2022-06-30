@@ -1,15 +1,21 @@
+from chalicelib import API_KEY
+from dateutil.relativedelta import relativedelta
+from chalice import Chalice, Response
+import requests
+from boto3.dynamodb.conditions import Key
+import jinja2  # import Environment, FileSystemLoader, select_autoescape
+import boto3
 import calendar
 import datetime
 import json
 import os
 
-import boto3
-import jinja2  # import Environment, FileSystemLoader, select_autoescape
-from boto3.dynamodb.conditions import Key
-from chalice import Chalice, Response
-from dateutil.relativedelta import relativedelta
+<< << << < HEAD
 
-from chalicelib import API_KEY
+== == == =
+
+>>>>>> > cc2d01a84d336f9368d241b5647fb1cbb89be319
+
 
 app = Chalice(app_name='qiitank')
 
