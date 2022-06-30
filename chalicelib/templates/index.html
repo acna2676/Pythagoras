@@ -1,20 +1,22 @@
 {% extends "layout.html" %} {% block content %}
 <div class="header">
-  <h2>Qiitaの人気記事</h2>
+  <h2>Qiitaの人気記事(Stock数300以上)</h2>
 </div>
 <div id="controllButton">
   <button
     id="prev"
     type="button"
-    value="{{dt_prev_year}} {{dt_prev_month}}<"
     onclick="location.href='/{{dt_prev_year}}{{dt_prev_month}}'"
-  ></button>
+  >
+    {{dt_prev_year}} {{dt_prev_month}}<
+  </button>
   <button
     id="next"
     type="button"
-    value=">{{dt_next_year}} {{dt_next_month}}"
     onclick="location.href='/{{dt_next_year}}{{dt_next_month}}'"
-  ></button>
+  >
+    >{{dt_next_year}} {{dt_next_month}}
+  </button>
 </div>
 
 <table class="table">

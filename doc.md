@@ -18,8 +18,12 @@
 ### アプリ起動
 
 ```bash
-cahlice local
+chalice local --stage local --port 8088
 ```
+
+※--stage local --port 8088
+git bash だとエラーになるのでコマンドプロンプトで実行
+error: sys.stderr.write → NoneType' object has no attribute 'write'
 
 ### DynamoDB Local
 
@@ -36,8 +40,12 @@ npx dynamodb-admin
 ## デプロイ
 
 ```bash
-cahlice deploy
+chalice deploy
 ```
+
+## lambda layer
+
+[github](https://github.com/keithrozario/Klayers/tree/master/deployments/python3.9)より取得
 
 ## Tips
 
