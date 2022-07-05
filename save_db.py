@@ -50,6 +50,7 @@ class Crowler:
             title = item.get('title')
             url = item.get('url')
             likes_count = item.get('likes_count')
+            stocks = item.get('stocks')  # FIXME 現状は取得できない?
             created_at = item.get('created_at')
             updated_at = item.get('updated_at')
 
@@ -59,6 +60,7 @@ class Crowler:
                 "title": title,
                 "url": url,
                 "likes_count": likes_count,
+                "stocks": stocks,
                 "created_at": created_at,
                 "updated_at": updated_at
             }
@@ -153,4 +155,4 @@ def lambda_handler(_, __):
 
 
 if __name__ == '__main__':
-    handler(None, None)
+    lambda_handler(None, None)
