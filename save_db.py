@@ -42,21 +42,34 @@ class Crowler:
         self.__target_month = self.__dt_now.strftime('%m')  # str(self.__dt_now.month)  # '3'
         self.__pk = self.__target_year + '-' + self.__target_month
 
+    def __get_stocks(self, article_id):
+        stock_counter = 0
+        for i in range(1, 101):
+            url = 'https://qiita.com/api/v2/items/'+article_id + '/stockers?page='+str(i)+'&per_page=100'
+
+            response = requests.get(url, headers=Crowler.headers)
+            res_content = json.loads(response.text)
+            if len(res_content) == 0:
+                return stock_counter
+
+            stock_counter += len(res_content)
+
     def put_items(self, items, target):
 
         target_pk = target.get('target_each_pk')
         for item in items:
-            article_id = str(uuid.uuid4())
+            article_id = item.get('article_id')
+            article_id_sk = str(uuid.uuid4())
             title = item.get('title')
             url = item.get('url')
             likes_count = item.get('likes_count')
-            stocks = item.get('stocks')  # FIXME 現状は取得できない?
+            stocks = self.__get_stocks(article_id)  # FIXME 現状は取得できない?
             created_at = item.get('created_at')
             updated_at = item.get('updated_at')
 
             items = {
                 "pk": target_pk,
-                "sk": 'id_' + article_id,
+                "sk": 'id_' + article_id_sk,
                 "title": title,
                 "url": url,
                 "likes_count": likes_count,
@@ -115,7 +128,8 @@ class Crowler:
         selected_articles_sorted = []
         for articles in selected_articles:
             for article in articles:
-                item = {"likes_count": article["likes_count"], "title": article["title"], "url": article["url"], "created_at": article["created_at"], "updated_at": article["updated_at"]}
+                item = {"article_id": article["id"], "likes_count": article["likes_count"], "title": article["title"],
+                        "url": article["url"], "created_at": article["created_at"], "updated_at": article["updated_at"]}
                 item["created_at"] = datetime.datetime.strptime(item["created_at"], '%Y-%m-%dT%H:%M:%S%z').strftime('%Y-%m-%d')
                 item["updated_at"] = datetime.datetime.strptime(item["updated_at"], '%Y-%m-%dT%H:%M:%S%z').strftime('%Y-%m-%d')
                 selected_articles_formatted.append(item)

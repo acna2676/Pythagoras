@@ -23,6 +23,7 @@
   <thead>
     <tr>
       <th style="width: 10%">Index</th>
+      <th style="width: 10%">Stock</th>
       <th style="width: 10%">LGTM</th>
       <th>Title</th>
       <th>CreatedAt</th>
@@ -33,6 +34,7 @@
     {% for article in selected_articles %}
     <tr>
       <td style="width: 10%">{{ loop.index }}</td>
+      <td style="width: 10%">{{ article.stocks }}</td>
       <td style="width: 10%">{{ article.likes_count }}</td>
       <td><a href="{{ article.url }}">{{ article.title }}</a></td>
       <td>{{ article.created_at }}</td>
