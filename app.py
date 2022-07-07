@@ -49,6 +49,12 @@ class DBAccessor:
 
 @app.route('/', methods=["GET"], content_types=["*/*"])
 def index():
+    stocks_fileter = 0
+    query_params = app.current_request.query_params
+    if query_params:
+        stocks_fileter = int(query_params.get('stocks'))
+    print("query = ", query_params)
+
     access_token = API_KEY
     headers = {'Authorization': 'Bearer '+access_token}
 
@@ -67,6 +73,8 @@ def index():
 
     db_accessor = DBAccessor(pk)
     selected_articles_sorted = db_accessor.get_items()
+    # stock数がquery_params以上のものでフィルタリング
+    selected_articles_sorted = filter(lambda x: x["stocks"] >= stocks_fileter, selected_articles_sorted)
 
     context = {"selected_articles": selected_articles_sorted, "dt_prev_year": dt_prev_year,
                "dt_prev_month": dt_prev_month.zfill(2), "dt_next_year": dt_next_year, "dt_next_month": dt_next_month.zfill(2)}
@@ -77,8 +85,14 @@ def index():
 @app.route('/{date}', methods=["GET"], content_types=["*/*"])  # /<date>とすると/の場合にもfavicon.icoで実行されてしまうためcreated-atを挟んでいる
 def other(date):
     if date == 'favicon.ico':
-        return index()
+        # return index()
+        return
     else:
+        stocks_fileter = 0
+        query_params = app.current_request.query_params
+        if query_params:
+            stocks_fileter = int(query_params.get('stocks'))
+        print("query = ", query_params)
 
         access_token = API_KEY
         headers = {'Authorization': 'Bearer '+access_token}
@@ -95,6 +109,7 @@ def other(date):
         pk = target_year + '-' + target_month
         db_accessor = DBAccessor(pk)
         selected_articles_sorted = db_accessor.get_items()
+        selected_articles_sorted = filter(lambda x: x["stocks"] >= stocks_fileter, selected_articles_sorted)
 
         context = {"selected_articles": selected_articles_sorted, "dt_prev_year": dt_prev_year,
                    "dt_prev_month": dt_prev_month.zfill(2), "dt_next_year": dt_next_year, "dt_next_month": dt_next_month.zfill(2)}

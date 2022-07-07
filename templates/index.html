@@ -1,8 +1,0 @@
-{% extends "layout.html" %} {% block content %}
-<h3>Qiitaの過去記事</h3>
-{% for articles in selected_articles %} {% for article in articles %}
-<li>
-  {{ loop.index }} : {{ article.likes_count }}:
-  <a href="{{ article.url }}">{{ article.title }}</a>
-</li>
-{% endfor %} {% endfor %} {% endblock %}
