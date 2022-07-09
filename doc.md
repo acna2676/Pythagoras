@@ -37,6 +37,11 @@ docker-compose up -d
 npx dynamodb-admin
 ```
 
+## mock api
+
+Qiita api の rate limit に引っかかるため
+[json-mock-api](https://www.npmjs.com/package/json-mock-api#usage)
+
 ## デプロイ
 
 ```bash

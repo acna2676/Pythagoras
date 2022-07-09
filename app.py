@@ -74,6 +74,7 @@ def index():
     db_accessor = DBAccessor(pk)
     selected_articles_sorted = db_accessor.get_items()
     # stock数がquery_params以上のものでフィルタリング
+    print("selected_articles_sorted = ", selected_articles_sorted)
     selected_articles_sorted = filter(lambda x: x["stocks"] >= stocks_fileter, selected_articles_sorted)
 
     context = {"selected_articles": selected_articles_sorted, "dt_prev_year": dt_prev_year,

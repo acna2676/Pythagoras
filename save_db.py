@@ -3,6 +3,7 @@ import datetime
 import json
 import os
 import uuid
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 
 import boto3
 import requests
@@ -19,6 +20,7 @@ def get_database():
 
 
 class Crowler:
+    DEBUG = False
     # NOTE ファクトリにできそう
     dynamodb = get_database()
     TABLE_NAME = os.environ.get('DB_TABLE_NAME')
@@ -45,10 +47,25 @@ class Crowler:
     def __get_stocks(self, article_id):
         stock_counter = 0
         for i in range(1, 101):
-            url = 'https://qiita.com/api/v2/items/'+article_id + '/stockers?page='+str(i)+'&per_page=100'
+            if self.DEBUG == True:
+                import time
+                url = 'http://localhost:5000/api/user_stocks'
+                time.sleep(1)  # 1秒待ってreturn
+                return stock_counter
+            else:
+                url = 'https://qiita.com/api/v2/items/'+article_id + '/stockers?page='+str(i)+'&per_page=100'
 
             response = requests.get(url, headers=Crowler.headers)
-            res_content = json.loads(response.text)
+            # print("response = ", response.text)
+            try:
+                res_content = json.loads(response.text)
+            except Exception as e:
+                # print("response.text = ", response.text)
+                print("urlll = ", url)
+                print("response.status_code = ", response.status_code)
+                print("error = ", e)
+                import sys
+                sys.exit()
             if len(res_content) == 0:
                 return stock_counter
 
@@ -118,11 +135,16 @@ class Crowler:
         _, lastday = calendar.monthrange(int(target_year), int(target_month))
         selected_articles = []
         for page in range(1, 2):  # NOTE クエリ結果が100件以上あると2ページ目となるため修正が必要(まだ余裕があるためそのままにしている)
-            url = 'https://qiita.com/api/v2/items?page='+str(page)+'&per_page=100&query=created%3A%3E'+target_year+'-'+target_month+'-01+created%3A%3C'+target_year+'-' + \
-                target_month+'-'+str(lastday)+'+stocks%3A%3E300'
+            if self.DEBUG == True:
+                url = 'http://localhost:5000/api/article'
+            else:
+                url = 'https://qiita.com/api/v2/items?page='+str(page)+'&per_page=100&query=created%3A%3E'+target_year+'-'+target_month+'-01+created%3A%3C'+target_year+'-' + \
+                    target_month+'-'+str(lastday)+'+stocks%3A%3E300'
 
             response = requests.get(url, headers=Crowler.headers)
             selected_articles.append(json.loads(response.text))
+            # print("selected_articles = ", selected_articles)
+            # return
         # print("selected_articles = ", selected_articles)
         selected_articles_formatted = []
         selected_articles_sorted = []
@@ -137,17 +159,25 @@ class Crowler:
         return selected_articles_sorted
 
     def create(self):
-        for target in self.__target_list:
-            print("***", target.get("target_each_year"), "-", target.get("target_each_month"))
-            self.delete_items(target)
-            result = self.get_ranking(target)
-            self.put_items(result, target)
+        # FIXME 503 if max_worler > 1
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            for target in self.__target_list:
+                print("***", target.get("target_each_year"), "-", target.get("target_each_month"))
+                if self.DEBUG == False:
+                    self.delete_items(target)
+                result = self.get_ranking(target)
+
+                executor.submit(self.put_items, result, target)
+                # self.put_items(result, target)
         return 200
 
 
 def lambda_main():
 
     crowler = Crowler()
+    # with ProcessPoolExecutor(max_workers=6) as executor:
+    # with ThreadPoolExecutor(max_workers=3) as executor:
+    # executor.submit(crowler.create)
     status_code = crowler.create()
 
     return status_code
