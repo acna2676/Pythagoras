@@ -160,7 +160,7 @@ class Crowler:
 
     def create(self):
         # FIXME 503 if max_worler > 1
-        with ThreadPoolExecutor(max_workers=1) as executor:
+        with ThreadPoolExecutor(max_workers=3) as executor:
             for target in self.__target_list:
                 print("***", target.get("target_each_year"), "-", target.get("target_each_month"))
                 if self.DEBUG == False:
