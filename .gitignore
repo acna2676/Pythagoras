@@ -9,3 +9,5 @@ sample.json
 node_modules/
 json-mock-api/node_modules/
 json-mock-api/yarn-error.log
+
+articles_crowler/.env

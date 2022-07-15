@@ -3,36 +3,32 @@ import datetime
 import json
 import os
 import uuid
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 
-import boto3
 import requests
-from boto3.dynamodb.conditions import Key
 from dateutil.relativedelta import relativedelta
 
+from db_access import DBAccessor
 
-def get_database():
-    endpoint = os.environ.get('DB_ENDPOINT')
-    if endpoint:
-        return boto3.resource('dynamodb', endpoint_url=endpoint)
-    else:
-        return boto3.resource('dynamodb')
+DEBUG = True
+if DEBUG:  # FIXME APIKEYがDEBUGの時しか読み込まれない, 本場では不要なため外出しする
+    from dotenv import load_dotenv
+    load_dotenv(verbose=True)
+
+MAX_PAGE_SIZE = 100
+PER_PAGE = 100
 
 
 class Crowler:
-    DEBUG = False
     # NOTE ファクトリにできそう
-    dynamodb = get_database()
-    TABLE_NAME = os.environ.get('DB_TABLE_NAME')
-    table = dynamodb.Table(TABLE_NAME)
-
-    access_token = '38b71e80eb38b29f4c9dfe728b2817121754038c'  # os.environ['API_KEY']
+    access_token = os.environ['API_KEY']
     headers = {'Authorization': 'Bearer '+access_token}
 
     def __init__(self):
-        # self.__selected_articles = []
         self.__dt_now = datetime.datetime.now()
         self.__target_list = []
+
+        self.__db_accessor = DBAccessor()
 
         for i in range(12):
             target_each_year = (self.__dt_now - relativedelta(months=i)).strftime('%Y')  # '2022'
@@ -46,23 +42,19 @@ class Crowler:
 
     def __get_stocks(self, article_id):
         stock_counter = 0
-        for i in range(1, 101):
-            if self.DEBUG == True:
+        for i in range(1, MAX_PAGE_SIZE+1):
+            if DEBUG == True:
                 import time
                 url = 'http://localhost:5000/api/user_stocks'
                 time.sleep(1)  # 1秒待ってreturn
                 return stock_counter
             else:
-                url = 'https://qiita.com/api/v2/items/'+article_id + '/stockers?page='+str(i)+'&per_page=100'
+                url = 'https://qiita.com/api/v2/items/'+article_id + '/stockers?page='+str(i)+'&per_page='+PER_PAGE
 
             response = requests.get(url, headers=Crowler.headers)
-            # print("response = ", response.text)
             try:
                 res_content = json.loads(response.text)
             except Exception as e:
-                # print("response.text = ", response.text)
-                print("urlll = ", url)
-                print("response.status_code = ", response.status_code)
                 print("error = ", e)
                 import sys
                 sys.exit()
@@ -80,7 +72,7 @@ class Crowler:
             title = item.get('title')
             url = item.get('url')
             likes_count = item.get('likes_count')
-            stocks = self.__get_stocks(article_id)  # FIXME 現状は取得できない?
+            stocks = self.__get_stocks(article_id)
             created_at = item.get('created_at')
             updated_at = item.get('updated_at')
 
@@ -96,9 +88,7 @@ class Crowler:
             }
 
             try:
-                Crowler.table.put_item(
-                    Item=items
-                )
+                self.__db_accessor.put_item(items)
             except Exception as e:
                 print(e)
                 return 500
@@ -106,27 +96,7 @@ class Crowler:
         return 200
 
     def delete_items(self, target):
-        pk = target.get('target_each_pk')
-        delete_targets = Crowler.table.query(
-            KeyConditionExpression=Key('pk').eq(pk) & Key('sk').begins_with("id_")
-        )['Items']
-        # print('delete_targets = ', delete_targets)
-
-        for target in delete_targets:
-            keys = {
-                "pk": target.get('pk'),
-                "sk": target.get('sk'),
-            }
-
-            try:
-                Crowler.table.delete_item(
-                    Key=keys
-                )
-            except Exception as e:
-                print(e)
-                return 500
-
-        return 200
+        return self.__db_accessor.delete_items(target.get('target_each_pk'))
 
     def get_ranking(self, target):
         target_year = target.get('target_each_year')
@@ -135,7 +105,7 @@ class Crowler:
         _, lastday = calendar.monthrange(int(target_year), int(target_month))
         selected_articles = []
         for page in range(1, 2):  # NOTE クエリ結果が100件以上あると2ページ目となるため修正が必要(まだ余裕があるためそのままにしている)
-            if self.DEBUG == True:
+            if DEBUG == True:
                 url = 'http://localhost:5000/api/article'
             else:
                 url = 'https://qiita.com/api/v2/items?page='+str(page)+'&per_page=100&query=created%3A%3E'+target_year+'-'+target_month+'-01+created%3A%3C'+target_year+'-' + \
@@ -143,9 +113,6 @@ class Crowler:
 
             response = requests.get(url, headers=Crowler.headers)
             selected_articles.append(json.loads(response.text))
-            # print("selected_articles = ", selected_articles)
-            # return
-        # print("selected_articles = ", selected_articles)
         selected_articles_formatted = []
         selected_articles_sorted = []
         for articles in selected_articles:
@@ -163,8 +130,8 @@ class Crowler:
         with ThreadPoolExecutor(max_workers=3) as executor:
             for target in self.__target_list:
                 print("***", target.get("target_each_year"), "-", target.get("target_each_month"))
-                if self.DEBUG == False:
-                    self.delete_items(target)
+                # if DEBUG == False:
+                self.delete_items(target)
                 result = self.get_ranking(target)
 
                 executor.submit(self.put_items, result, target)
@@ -175,9 +142,6 @@ class Crowler:
 def lambda_main():
 
     crowler = Crowler()
-    # with ProcessPoolExecutor(max_workers=6) as executor:
-    # with ThreadPoolExecutor(max_workers=3) as executor:
-    # executor.submit(crowler.create)
     status_code = crowler.create()
 
     return status_code

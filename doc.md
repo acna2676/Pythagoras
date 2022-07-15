@@ -39,6 +39,10 @@ npx dynamodb-admin
 
 ## mock api
 
+```bash
+npm run mock
+```
+
 Qiita api の rate limit に引っかかるため
 [json-mock-api](https://www.npmjs.com/package/json-mock-api#usage)
 
