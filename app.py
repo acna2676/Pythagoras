@@ -11,7 +11,7 @@ from dateutil.relativedelta import relativedelta
 
 from chalicelib import API_KEY
 
-app = Chalice(app_name='qiitank')
+app = Chalice(app_name='pythagoras')
 
 
 def get_database():
