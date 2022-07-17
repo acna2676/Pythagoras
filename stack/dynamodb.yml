@@ -1,4 +1,11 @@
 AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  ProjectName:
+    Type: String
+    Default: pythagoras
+  Env:
+    Type: String
+    Default: dev
 Resources: 
   atumTable: 
     Type: AWS::DynamoDB::Table
@@ -18,6 +25,6 @@ Resources:
       ProvisionedThroughput: 
         ReadCapacityUnits: "5"
         WriteCapacityUnits: "5"
-      TableName: "pythagoras"
+      TableName: !Sub ${ProjectName}-${Env}
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: true
