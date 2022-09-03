@@ -1,6 +1,6 @@
 import time
 
-import articles_crowler.lambda_function as lambda_function
+import functions.lambda_function as lambda_function
 
 if __name__ == '__main__':
     start = time.time()

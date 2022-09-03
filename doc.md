@@ -15,6 +15,11 @@
 
 ## ローカル動作確認
 
+## 環境変数
+
+以下に記載
+.chalice/config.json
+
 ### アプリ起動
 
 ```bash
@@ -56,6 +61,30 @@ chalice deploy
 
 [github](https://github.com/keithrozario/Klayers/tree/master/deployments/python3.9)より取得
 
+## crowler のデプロイ
+
+EventBridge + Lambda を SAM でデプロイ
+
+- 1. デプロイパッケージ格納用の S3 バケットを作成
+
+```
+aws cloudformation create-stack
+```
+
+- 2. テンプレートのパッケージ化
+
+```
+sam package
+```
+
+- 3. パッケージのデプロイ
+
+```
+sam deploy
+```
+
 ## Tips
 
 - response に utf を指定しないと日本語が文字化けする
+- [Qiita API V2 の利用制限](https://qiita.com/api/v2/docs#%E6%A6%82%E8%A6%81)
+  認証している状態ではユーザごとに 1 時間に 1000 回まで、認証していない状態では IP アドレスごとに 1 時間に 60 回までリクエストを受け付けます。

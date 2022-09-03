@@ -12,3 +12,5 @@ json-mock-api/yarn-error.log
 
 articles_crowler/.env
 sphinx/
+
+docker/dynamodb/shared-local-instance.db
