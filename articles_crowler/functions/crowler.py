@@ -8,9 +8,9 @@ from concurrent.futures import ThreadPoolExecutor
 import requests
 from dateutil.relativedelta import relativedelta
 
-from db_access import DBAccessor
+from .db_access import DBAccessor
 
-DEBUG = True
+DEBUG = False
 if DEBUG:  # FIXME APIKEYがDEBUGの時しか読み込まれない, 本場では不要なため外出しする
     from dotenv import load_dotenv
     load_dotenv(verbose=True)
@@ -33,6 +33,7 @@ class Crowler:
         self.__db_accessor = DBAccessor()
 
     def __get_stocks(self, article_id: str):
+        print("article_id = ", article_id)
         stock_counter = 0
         for i in range(1, MAX_PAGE_SIZE+1):
             if DEBUG:
@@ -41,7 +42,7 @@ class Crowler:
                 time.sleep(1)  # 1秒待ってreturn
                 return stock_counter
             else:
-                url = URL_QIITA_API_V2 + '/items/'+article_id + '/stockers?page='+str(i)+'&per_page='+PER_PAGE
+                url = URL_QIITA_API_V2 + '/items/'+article_id + '/stockers?page='+str(i)+'&per_page='+str(PER_PAGE)
 
             response = requests.get(url, headers=Crowler.headers)
             try:
@@ -54,6 +55,7 @@ class Crowler:
                 return stock_counter
 
             stock_counter += len(res_content)
+        return stock_counter
 
     def __create_items(self, item, target_pk):
         article_id = item.get('article_id')
@@ -102,7 +104,7 @@ class Crowler:
                 url = 'http://localhost:5000/api/article'
             else:
                 url = URL_QIITA_API_V2 + '/items?page='+str(page)+'&per_page=100&query=created%3A%3E'+target_year+'-'+target_month+'-01+created%3A%3C'+target_year+'-' + \
-                    target_month+'-'+str(lastday)+'+stocks%3A%3E' + STOCKS
+                    target_month+'-'+str(lastday)+'+stocks%3A%3E' + str(STOCKS)
 
             response = requests.get(url, headers=Crowler.headers)
             selected_articles.append(json.loads(response.text))
@@ -147,7 +149,7 @@ class Crowler:
         """
         # FIXME 503 if max_worler > 1
         with ThreadPoolExecutor(max_workers=3) as executor:
-            for target in self.__target_list:
+            for target in self.__target_list[:2]:
                 print("***", target.get("target_each_year"), "-", target.get("target_each_month"))
                 # if DEBUG == False:
                 self.__delete_articles(target)

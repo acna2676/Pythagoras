@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: pythagoras
+  Environment:
+    Type: String
+    Default: dev
+
+Resources:
+  pythagorasArticleCrawler:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-${Environment}-articles_crawler
+      CodeUri: functions/
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.9
+      Layers: 
+        - arn:aws:lambda:ap-northeast-1:770693421928:layer:Klayers-p39-requests:7
+      Environment:
+        Variables:
+          DB_TABLE_NAME: !Sub ${ProjectName}-${Environment}
+      Events:
+        Schedule:
+          Type: Schedule 
+          Properties:
+            Name: !Sub ${ProjectName}-${Environment}-articles_crawler-trigger
+            Schedule: cron(0 * * * ? *)

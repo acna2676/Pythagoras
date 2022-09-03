@@ -3,7 +3,7 @@ import os
 import boto3
 from boto3.dynamodb.conditions import Key
 
-DEBUG = True
+DEBUG = False
 if DEBUG:
     from dotenv import load_dotenv
     load_dotenv(verbose=True)
@@ -15,9 +15,11 @@ class DBAccessor:
     # NOTE ファクトリにできそう
 
     TABLE_NAME = os.environ.get('DB_TABLE_NAME')
+    print("TABLE_NAME = ", TABLE_NAME)
 
     def __init__(self):
         # pk = pk
+        print(DBAccessor.TABLE_NAME)
         dynamodb = DBAccessor.create_db_instance()
         self.__table = dynamodb.Table(DBAccessor.TABLE_NAME)
 

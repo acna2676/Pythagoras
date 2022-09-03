@@ -17,8 +17,10 @@ app = Chalice(app_name='pythagoras')
 def get_database():
     endpoint = os.environ.get('DB_ENDPOINT')
     if endpoint:
+        print("db endpoint enabled: ", endpoint)
         return boto3.resource('dynamodb', endpoint_url=endpoint)
     else:
+        print("db endpoint disabled")
         return boto3.resource('dynamodb')
 
 
@@ -27,6 +29,8 @@ class DBAccessor:
     # NOTE ファクトリにできそう
     dynamodb = get_database()
     TABLE_NAME = os.environ.get('DB_TABLE_NAME')
+    # FIXME table name:  pythagorasになる
+    print("table name: ", TABLE_NAME)
     table = dynamodb.Table(TABLE_NAME)
 
     def __init__(self, pk):
@@ -68,6 +72,7 @@ def index():
 
     target_year = str(dt_now.year)  # '2021'
     target_month = str(dt_now.month).zfill(2)  # '03'
+    print(target_year, target_month)
 
     pk = target_year + '-' + target_month
 

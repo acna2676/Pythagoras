@@ -5,14 +5,14 @@
     "dev": {
       "api_gateway_stage": "api",
       "environment_variables": {
-        "DB_TABLE_NAME": "pythagoras"
+        "DB_TABLE_NAME": "pythagoras-dev"
       }
     },
     "local": {
       "environment_variables": {
         "IS_LOCAL": "true",
         "DB_ENDPOINT": "http://localhost:8000",
-        "DB_TABLE_NAME": "pythagoras"
+        "DB_TABLE_NAME": "pythagoras-dev"
       }
     }
   }
