@@ -11,6 +11,7 @@ json-mock-api/node_modules/
 json-mock-api/yarn-error.log
 
 articles_crowler/.env
+articles_crowler/articles_crawler_parameters.json
 sphinx/
 
 docker/dynamodb/shared-local-instance.db

@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 import requests
 from dateutil.relativedelta import relativedelta
 
-from .db_access import DBAccessor
+from db_access import DBAccessor
 
 DEBUG = False
 if DEBUG:  # FIXME APIKEYがDEBUGの時しか読み込まれない, 本場では不要なため外出しする
@@ -147,9 +147,17 @@ class Crowler:
         Returns:
             int: _description_
         """
+        # 現在時刻から処理する月を１つ決定
+        dt_now = datetime.datetime.now()
+        dt_now_hour = dt_now.strftime('%H')
+        print("target_month_index = ", dt_now_hour)
+        target_month_index = (int(dt_now_hour) % 12)
+
         # FIXME 503 if max_worler > 1
         with ThreadPoolExecutor(max_workers=3) as executor:
-            for target in self.__target_list[:2]:
+            # for target in self.__target_list[:2]:
+            print("target_month_index = ", target_month_index)
+            for target in [self.__target_list[target_month_index]]:
                 print("***", target.get("target_each_year"), "-", target.get("target_each_month"))
                 # if DEBUG == False:
                 self.__delete_articles(target)

@@ -1,7 +1,7 @@
 
 import json
 
-from .crowler import Crowler
+from crowler import Crowler
 
 
 def lambda_main():
