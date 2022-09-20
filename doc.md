@@ -45,8 +45,10 @@ npx dynamodb-admin
 ## mock api
 
 ```bash
-npm run mock
+json-server --watch server.json --routes routes.json --port 5000
 ```
+
+- クエリパラメータによって違う結果を返す方法がわからない
 
 Qiita api の rate limit に引っかかるため
 [json-mock-api](https://www.npmjs.com/package/json-mock-api#usage)
@@ -88,3 +90,6 @@ sam deploy
 - response に utf を指定しないと日本語が文字化けする
 - [Qiita API V2 の利用制限](https://qiita.com/api/v2/docs#%E6%A6%82%E8%A6%81)
   認証している状態ではユーザごとに 1 時間に 1000 回まで、認証していない状態では IP アドレスごとに 1 時間に 60 回までリクエストを受け付けます。
+- "errorMessage": "Unable to import module 'lambda_function': attempted relative import with no known parent package",
+
+- [AWS Chalice で必要な IAM ポリシーが正しく作成されなかったときの話](https://michimani.net/post/aws-about-auto-generate-iam-policy-in-chalice/)

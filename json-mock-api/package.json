@@ -1,9 +1,0 @@
-{
-  "name": "json-mock-api",
-  "scripts": {
-    "mock": "json-mock-api --port 5000 --directory ."
-  },
-  "dependencies": {
-    "json-mock-api": "^1.2.2"
-  }
-}
