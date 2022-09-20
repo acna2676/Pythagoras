@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  ProjectName:
+    Type: String
+    Default: pythagoras
+  Environment:
+    Type: String
+    Default: dev
+  ApiKey:
+    Type: String
+  UrlQiitaApiV2:
+    Type: String
+Resources:
+  pythagorasArticleCrawler:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName:
+        Fn::Sub: ${ProjectName}-${Environment}-articles_crawler
+      CodeUri: s3://pythagoras-dev-sam-package/dff4cf965c2565b42d1fe453a1de8bca
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.9
+      Timeout: 90
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Fn::Sub: ${ProjectName}-${Environment}
+      Layers:
+      - arn:aws:lambda:ap-northeast-1:770693421928:layer:Klayers-p39-requests:7
+      - arn:aws:lambda:ap-northeast-1:770693421928:layer:Klayers-p39-aws-xray-sdk:7
+      Environment:
+        Variables:
+          API_KEY:
+            Fn::Sub: ${ApiKey}
+          DB_TABLE_NAME:
+            Fn::Sub: ${ProjectName}-${Environment}
+          URL_QIITA_API_V2:
+            Fn::Sub: ${UrlQiitaApiV2}
+      Events:
+        Schedule:
+          Type: Schedule
+          Properties:
+            Name:
+              Fn::Sub: ${ProjectName}-${Environment}-articles_crawler-trigger
+            Schedule: cron(0 * * * ? *)
+    Metadata:
+      SamResourceId: pythagorasArticleCrawler
