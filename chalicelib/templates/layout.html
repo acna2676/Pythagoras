@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{ title }}</title>
+    <title>Qiitank</title>
+    <meta property="og:title" content="Qiitank" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://qiitank.r-nakaishi.com/" />
+    <meta
+      property="og:image"
+      content="https://pythagoras-dev-content.s3.ap-northeast-1.amazonaws.com/OGP.png"
+    />
+    <meta property="og:site_name" content="Qiitank" />
+    <meta property="og:description" content="Qiitaの人気記事を検索しよう！" />
     <link rel="stylesheet" href="chalicelib/static/css/style.css" />
-    <!-- <link rel="stylesheet" href="api/chalicelib/static/css/style.css" /> -->
   </head>
+  <!-- Google tag (gtag.js) -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-5RJWNVWH90"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-5RJWNVWH90");
+  </script>
   <body>
     {% block content %}
     <!-- ここに個別のhtmlが入る -->

@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block content %}
 <div class="header">
-  <h2>Qiitaの人気記事</h2>
+  <h2>Qiitaの人気記事({{dt_year}}/{{dt_month}})</h2>
 </div>
 <div id="controllButton">
   <button
@@ -8,17 +8,18 @@
     type="button"
     onclick="location.href='/{{dt_prev_year}}{{dt_prev_month}}'"
   >
-    {{dt_prev_year}} {{dt_prev_month}}<
+    {{dt_prev_year}}/{{dt_prev_month}}<
   </button>
   <button
     id="next"
     type="button"
     onclick="location.href='/{{dt_next_year}}{{dt_next_month}}'"
   >
-    >{{dt_next_year}} {{dt_next_month}}
+    >{{dt_next_year}}/{{dt_next_month}}
   </button>
   <form action="" method="GET">
-    <select name="stocks">
+    <label for="stocks">ストック数で検索する</label>
+    <select name="stocks" id="stocks">
       <option value="300">300以上</option>
       <option value="400">400以上</option>
       <option value="500">500以上</option>
