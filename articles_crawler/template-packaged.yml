@@ -17,7 +17,7 @@ Resources:
     Properties:
       FunctionName:
         Fn::Sub: ${ProjectName}-${Environment}-articles_crawler
-      CodeUri: s3://pythagoras-dev-sam-package/dff4cf965c2565b42d1fe453a1de8bca
+      CodeUri: s3://pythagoras-dev-sam-package/0ec4bddbf3b56b77e95166626a35b08b
       Handler: lambda_function.lambda_handler
       Runtime: python3.9
       Timeout: 90

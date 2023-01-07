@@ -93,3 +93,8 @@ sam deploy
 - "errorMessage": "Unable to import module 'lambda_function': attempted relative import with no known parent package",
 
 - [AWS Chalice で必要な IAM ポリシーが正しく作成されなかったときの話](https://michimani.net/post/aws-about-auto-generate-iam-policy-in-chalice/)
+
+## docstring から html を生成
+
+- [[備忘録]docstring から, 「美ドキュメント」を自動生成する.](https://qiita.com/Ric418/items/bc02e47395b971b754a3)
+- [Python の Docstrings から HTML ドキュメントを作る](https://blog.goediy.com/?p=494)

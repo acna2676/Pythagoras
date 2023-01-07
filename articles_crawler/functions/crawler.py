@@ -6,9 +6,8 @@ import uuid
 
 import requests
 from aws_xray_sdk.core import patch_all
-from dateutil.relativedelta import relativedelta
-
 from common.log import Log
+from dateutil.relativedelta import relativedelta
 from db_access import DBAccessor
 
 log = Log(__name__)
@@ -19,7 +18,7 @@ MAX_PAGE_SIZE = 100
 MONTH_NUM = 12
 PAGE_NUM = 1
 PER_PAGE = 100
-STOCKS = 300  # 検索対象にするstock数
+STOCKS = 100  # 検索対象にするstock数
 URL_QIITA_API_V2 = os.environ["URL_QIITA_API_V2"]
 
 
