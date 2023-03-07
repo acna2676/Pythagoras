@@ -53,6 +53,17 @@ def get_css():
         data = f.read()
     return Response(body=data, status_code=200, headers={"Content-Type": "text/css", "Access-Control-Allow-Origin": "*"})
 
+@app.route('/chalicelib/static/css/sort.css')
+def get_sort_css():
+    with open('chalicelib/static/css/sort.css') as f:
+        data = f.read()
+    return Response(body=data, status_code=200, headers={"Content-Type": "text/css", "Access-Control-Allow-Origin": "*"})
+
+@app.route('/chalicelib/static/js/sort.js')
+def get_sort_js():
+    with open('chalicelib/static/js/sort.js') as f:
+        data = f.read()
+    return Response(body=data, status_code=200, headers={"Content-Type": "text/javascript", "Access-Control-Allow-Origin": "*"})
 
 @app.route('/', methods=["GET"], content_types=["*/*"])
 def display_index_page():
@@ -75,9 +86,10 @@ def display_index_page():
     pk = target_year + '-' + target_month
 
     db_accessor = DBAccessor(pk)
-    selected_articles_sorted = db_accessor.get_items()
+    selected_articles_filtered = db_accessor.get_items()
     # stock数がquery_params以上のものでフィルタリング
-    selected_articles_sorted = filter(lambda x: x["stocks"] >= stocks_fileter, selected_articles_sorted)
+    selected_articles_filtered = filter(lambda x: x["stocks"] >= stocks_fileter, selected_articles_filtered)
+    selected_articles_sorted = sorted(selected_articles_filtered, key=lambda k: k['stocks'], reverse=True)
 
     context = {"selected_articles": selected_articles_sorted, "dt_prev_year": dt_prev_year,
                "dt_prev_month": dt_prev_month.zfill(2), "dt_year": dt_year, "dt_month": dt_month.zfill(2), "dt_next_year": dt_next_year, "dt_next_month": dt_next_month.zfill(2)}
@@ -104,8 +116,9 @@ def display_page_for_target_month(date):
 
     pk = target_year + '-' + target_month
     db_accessor = DBAccessor(pk)
-    selected_articles_sorted = db_accessor.get_items()
-    selected_articles_sorted = filter(lambda x: x["stocks"] >= stocks_fileter, selected_articles_sorted)
+    selected_articles_filtered = db_accessor.get_items()
+    selected_articles_filtered = filter(lambda x: x["stocks"] >= stocks_fileter, selected_articles_filtered)
+    selected_articles_sorted = sorted(selected_articles_filtered, key=lambda k: k['stocks'], reverse=True)
 
     context = {"selected_articles": selected_articles_sorted, "dt_prev_year": dt_prev_year,
                "dt_prev_month": dt_prev_month.zfill(2), "dt_year": dt_year, "dt_month": dt_month.zfill(2), "dt_next_year": dt_next_year, "dt_next_month": dt_next_month.zfill(2)}

@@ -34,17 +34,17 @@
     <input type="submit" value="検索" />
     <!-- <button value="button" onclick="location.href=location.origin+'?stocks=value'">検索</button> -->
   </form>
-</div>
+  </div>
 
-<table class="table">
+<table class="table" id="articlesTable">
   <thead>
     <tr>
       <th style="width: 10%">Index</th>
-      <th style="width: 10%">Stock</th>
-      <th style="width: 10%">LGTM</th>
+      <th class="sortable" id="sortableStock" style="width: 10%">Stock</th>
+      <th class="sortable" id="sortableLgtm"style="width: 10%">LGTM</th>
       <th>Title</th>
-      <th>CreatedAt</th>
-      <th>UpdatedAt</th>
+      <th class="sortable" >CreatedAt</th>
+      <th class="sortable" >UpdatedAt</th>
     </tr>
   </thead>
   <tbody>

@@ -1,0 +1,39 @@
+.table .sortable {
+    cursor: pointer;
+    position: relative;
+}
+
+.table .sortable::before, .table .sortable::after {
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    border: 5px solid transparent;
+    right: 10px;
+    top: 50%;
+}
+
+.table .sortable::before {
+    border-bottom-color: #fff;
+    margin-top: -10px;
+}
+.table .sortable::after {
+    border-top-color: #fff;
+    margin-top: 2px;
+}
+
+.sortButton{
+    width: 25%;
+    /* padding: 10px 0; */
+    /* display: block; */
+    /* width: 200px; */
+    /*コレ*/background: transparent;
+    border: none;
+    padding: 0;
+    /* margin: 100; */
+    /* text-align: center; */
+    /* text-decoration: none; */
+    color: #FFF;
+    /* font-size: 120%; */
+    /* font-weight: bold; */
+}
