@@ -15,3 +15,5 @@ articles_crawler/articles_crawler_parameters.json
 sphinx/
 
 docker/dynamodb/shared-local-instance.db
+
+.devcontainer/
