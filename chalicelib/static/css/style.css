@@ -16,6 +16,7 @@ h2 {
 #controllButton {
   text-align: center;
   height: 1%;
+  padding: 0.5em;
 }
 
 .table {
@@ -23,7 +24,7 @@ h2 {
   /* margin-bottom: 15%; */
   margin-left: auto;
   margin-right: auto;
-  color: #3eeeee;
+  color: #55c501;
   border-collapse: collapse;
   border: none;
   border-radius: 5px;
@@ -75,4 +76,35 @@ table td {
   border-color: #55c501;
   border-radius: 5px;
   background-color: white;
+}
+
+#articlesTable tbody tr:nth-child(odd) {
+  background-color: #fafafa;
+}
+
+#articlesTable tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.container {
+  display: flex;
+  /* justify-content: space-between; */
+}
+
+.column {
+  width: 33%;
+  /* padding: 10px; */
+}
+
+.left {
+  /* background-color: #eee; */
+}
+
+.center {
+  /* background-color: #ddd; */
+}
+
+.right {
+  /* background-color: #ccc; */
+  text-align: right;
 }

@@ -1,50 +1,56 @@
 {% extends "layout.html" %} {% block content %}
 <div class="header">
-  <h2>Qiitaの人気記事({{dt_year}}/{{dt_month}})</h2>
+  <h2>Qiitaの人気記事</h2>
 </div>
-<div id="controllButton">
-  <button
-    id="prev"
-    type="button"
-    onclick="location.href='/{{dt_prev_year}}{{dt_prev_month}}'"
-  >
-    {{dt_prev_year}}/{{dt_prev_month}}<
-  </button>
-  <button
-    id="next"
-    type="button"
-    onclick="location.href='/{{dt_next_year}}{{dt_next_month}}'"
-  >
-    >{{dt_next_year}}/{{dt_next_month}}
-  </button>
-  <form action="" method="GET">
-    <label for="stocks">ストック数で検索する</label>
-    <select name="stocks" id="stocks">
-      <option value="100">100以上</option>
-      <option value="200">200以上</option>
-      <option value="300">300以上</option>
-      <option value="400">400以上</option>
-      <option value="500">500以上</option>
-      <option value="600">600以上</option>
-      <option value="700">700以上</option>
-      <option value="800">800以上</option>
-      <option value="900">900以上</option>
-      <option value="1000">1000以上</option>
-    </select>
-    <input type="submit" value="検索" />
-    <!-- <button value="button" onclick="location.href=location.origin+'?stocks=value'">検索</button> -->
-  </form>
+<div class="container" id="controllButton">
+  <div class="column left"></div>
+  <div class="column center">
+    <button
+      id="prev"
+      type="button"
+      onclick="location.href='/{{dt_prev_year}}{{dt_prev_month}}'"
+    >
+      前月<
+    </button>
+    {{dt_year}}/{{dt_month}}の人気記事
+    <button
+      id="next"
+      type="button"
+      onclick="location.href='/{{dt_next_year}}{{dt_next_month}}'"
+    >
+      >次月
+    </button>
   </div>
+  <div class="column right">
+    <form action="" method="GET">
+      <label for="stocks">ストック数でフィルタリング</label>
+      <select name="stocks" id="stocks">
+        <option value="100">100以上</option>
+        <option value="200">200以上</option>
+        <option value="300">300以上</option>
+        <option value="400">400以上</option>
+        <option value="500">500以上</option>
+        <option value="600">600以上</option>
+        <option value="700">700以上</option>
+        <option value="800">800以上</option>
+        <option value="900">900以上</option>
+        <option value="1000">1000以上</option>
+      </select>
+      <input type="submit" value="検索" />
+      <!-- <button value="button" onclick="location.href=location.origin+'?stocks=value'">検索</button> -->
+    </form>
+  </div>
+</div>
 
 <table class="table" id="articlesTable">
   <thead>
     <tr>
       <th style="width: 10%">Index</th>
       <th class="sortable" id="sortableStock" style="width: 10%">Stock</th>
-      <th class="sortable" id="sortableLgtm"style="width: 10%">LGTM</th>
+      <th class="sortable" id="sortableLgtm" style="width: 10%">LGTM</th>
       <th>Title</th>
-      <th class="sortable" >CreatedAt</th>
-      <th class="sortable" >UpdatedAt</th>
+      <th class="sortable">CreatedAt</th>
+      <th class="sortable">UpdatedAt</th>
     </tr>
   </thead>
   <tbody>

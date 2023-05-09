@@ -30,6 +30,7 @@ urllib3 = "==1.26.8"
 wcwidth = "==0.2.5"
 werkzeug = "==2.0.3"
 aws-xray-sdk = "*"
+jinxed = "*"
 
 [dev-packages]
 python-dotenv = "*"
