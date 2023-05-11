@@ -2,7 +2,7 @@ import datetime
 import os
 
 import boto3
-import jinja2  # import Environment, FileSystemLoader, select_autoescape
+import jinja2
 from boto3.dynamodb.conditions import Key
 from chalice import Chalice, Response
 from dateutil.relativedelta import relativedelta
@@ -37,7 +37,7 @@ class DBAccessor:
             print("e = ", e)
             return 500
 
-        items = response['Items']  # [0]
+        items = response['Items']
 
         return items
 
@@ -53,17 +53,20 @@ def get_css():
         data = f.read()
     return Response(body=data, status_code=200, headers={"Content-Type": "text/css", "Access-Control-Allow-Origin": "*"})
 
+
 @app.route('/chalicelib/static/css/sort.css')
 def get_sort_css():
     with open('chalicelib/static/css/sort.css') as f:
         data = f.read()
     return Response(body=data, status_code=200, headers={"Content-Type": "text/css", "Access-Control-Allow-Origin": "*"})
 
+
 @app.route('/chalicelib/static/js/sort.js')
 def get_sort_js():
     with open('chalicelib/static/js/sort.js') as f:
         data = f.read()
     return Response(body=data, status_code=200, headers={"Content-Type": "text/javascript", "Access-Control-Allow-Origin": "*"})
+
 
 @app.route('/', methods=["GET"], content_types=["*/*"])
 def display_index_page():

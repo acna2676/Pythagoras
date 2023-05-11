@@ -20,8 +20,6 @@ h2 {
 }
 
 .table {
-  /* margin-top: 15%; */
-  /* margin-bottom: 15%; */
   margin-left: auto;
   margin-right: auto;
   color: #55c501;
@@ -49,17 +47,13 @@ table th {
   text-align: center;
   color: white;
   background: #55c501;
-  /* box-shadow: 0px 1px 1px rgba(255, 255, 255, 0.3) inset; */
   width: 25%;
   padding: 10px 0;
 }
 
 table td {
   text-align: center;
-  /* border-left: 1px solid #a8b7c5; */
-  /* border-bottom: 1px solid #a8b7c5; */
   border-top: none;
-  /* box-shadow: 0px -3px 5px 1px #eee inset; */
   width: 25%;
   padding: 10px 0;
 }
@@ -88,23 +82,12 @@ table td {
 
 .container {
   display: flex;
-  /* justify-content: space-between; */
 }
 
 .column {
   width: 33%;
-  /* padding: 10px; */
-}
-
-.left {
-  /* background-color: #eee; */
-}
-
-.center {
-  /* background-color: #ddd; */
 }
 
 .right {
-  /* background-color: #ccc; */
   text-align: right;
 }
