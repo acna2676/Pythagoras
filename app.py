@@ -1,4 +1,5 @@
 import datetime
+import html
 import os
 
 import boto3
@@ -63,7 +64,7 @@ def get_sort_css():
 
 @app.route('/chalicelib/static/js/sort.js')
 def get_sort_js():
-    with open('chalicelib/static/js/sort.js') as f:
+    with open('chalicelib/static/js/sort.js', encoding='utf-8') as f:
         data = f.read()
     return Response(body=data, status_code=200, headers={"Content-Type": "text/javascript", "Access-Control-Allow-Origin": "*"})
 
@@ -93,6 +94,10 @@ def display_index_page():
     # stock数がquery_params以上のものでフィルタリング
     selected_articles_filtered = filter(lambda x: x["stocks"] >= stocks_fileter, selected_articles_filtered)
     selected_articles_sorted = sorted(selected_articles_filtered, key=lambda k: k['stocks'], reverse=True)
+    # タイトルに<>などの文字が含まれているとレイアウト崩れやソートが機能しないなどの不具合が発生するためエスケープ処理を施す(flaskはデフォルトでエスケープ処理がなされるみたいだが、chaliceはエスケープしてくれない？)
+    for article in selected_articles_sorted:
+        if 'title' in article:
+            article['title'] = html.escape(article['title'])
 
     context = {"selected_articles": selected_articles_sorted, "dt_prev_year": dt_prev_year,
                "dt_prev_month": dt_prev_month.zfill(2), "dt_year": dt_year, "dt_month": dt_month.zfill(2), "dt_next_year": dt_next_year, "dt_next_month": dt_next_month.zfill(2)}
@@ -122,6 +127,10 @@ def display_page_for_target_month(date):
     selected_articles_filtered = db_accessor.get_items()
     selected_articles_filtered = filter(lambda x: x["stocks"] >= stocks_fileter, selected_articles_filtered)
     selected_articles_sorted = sorted(selected_articles_filtered, key=lambda k: k['stocks'], reverse=True)
+
+    for article in selected_articles_sorted:
+        if 'title' in article:
+            article['title'] = html.escape(article['title'])
 
     context = {"selected_articles": selected_articles_sorted, "dt_prev_year": dt_prev_year,
                "dt_prev_month": dt_prev_month.zfill(2), "dt_year": dt_year, "dt_month": dt_month.zfill(2), "dt_next_year": dt_next_year, "dt_next_month": dt_next_month.zfill(2)}
