@@ -94,6 +94,9 @@ sam deploy
 
 - [AWS Chalice で必要な IAM ポリシーが正しく作成されなかったときの話](https://michimani.net/post/aws-about-auto-generate-iam-policy-in-chalice/)
 
+- キャッシュ設定などのステージレベルの設定は chalice deploy では上書きされない。メソッドレベルのキャッシュ設定は上書きされる
+- 設定ファイル or ソース内での APIGateway でのキャッシュの設定方法がわからなかったので手動設定した。※ただしメソッドレベルのキャッシュ設定は上書きされるためデプロイするたびに手動での設定変更＆デプロイ作業が必要となる。（かなりめんどくさい）
+
 ## docstring から html を生成
 
 - [[備忘録]docstring から, 「美ドキュメント」を自動生成する.](https://qiita.com/Ric418/items/bc02e47395b971b754a3)

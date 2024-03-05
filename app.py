@@ -10,6 +10,13 @@ from dateutil.relativedelta import relativedelta
 
 app = Chalice(app_name='pythagoras')
 
+def print_function_name(func):
+    def wrapper(*args, **kwargs):
+        print(f"{func.__name__} was called")
+        result = func(*args, **kwargs)
+        return result
+    return wrapper
+
 
 def get_database():
     endpoint = os.environ.get('DB_ENDPOINT')
@@ -42,34 +49,34 @@ class DBAccessor:
 
         return items
 
-
 @app.route('/favicon.ico')
+@print_function_name
 def get_favicon():
     return Response(body="", status_code=301, headers={'Location': 'https://pythagoras-dev-content.s3.ap-northeast-1.amazonaws.com/favicon.ico', "Content-Type": "image/x-icon", "Access-Control-Allow-Origin": "*"})
 
-
 @app.route('/chalicelib/static/css/style.css')
+@print_function_name
 def get_css():
     with open('chalicelib/static/css/style.css') as f:
         data = f.read()
     return Response(body=data, status_code=200, headers={"Content-Type": "text/css", "Access-Control-Allow-Origin": "*"})
 
-
 @app.route('/chalicelib/static/css/sort.css')
+@print_function_name
 def get_sort_css():
     with open('chalicelib/static/css/sort.css') as f:
         data = f.read()
     return Response(body=data, status_code=200, headers={"Content-Type": "text/css", "Access-Control-Allow-Origin": "*"})
 
-
 @app.route('/chalicelib/static/js/sort.js')
+@print_function_name
 def get_sort_js():
     with open('chalicelib/static/js/sort.js', encoding='utf-8') as f:
         data = f.read()
     return Response(body=data, status_code=200, headers={"Content-Type": "text/javascript", "Access-Control-Allow-Origin": "*"})
 
-
 @app.route('/', methods=["GET"], content_types=["*/*"])
+@print_function_name
 def display_index_page():
     stocks_fileter = 0
     query_params = app.current_request.query_params
@@ -104,8 +111,8 @@ def display_index_page():
     template = render("chalicelib/templates/index.html", context)
     return Response(template, status_code=200, headers={"Content-Type": "text/html;charset=UTF-8", "Access-Control-Allow-Origin": "*"})
 
-
 @app.route('/{date}', methods=["GET"], content_types=["*/*"])
+@print_function_name
 def display_page_for_target_month(date):
     stocks_fileter = 0
     query_params = app.current_request.query_params
@@ -136,7 +143,6 @@ def display_page_for_target_month(date):
                "dt_prev_month": dt_prev_month.zfill(2), "dt_year": dt_year, "dt_month": dt_month.zfill(2), "dt_next_year": dt_next_year, "dt_next_month": dt_next_month.zfill(2)}
     template = render("chalicelib/templates/index.html", context)
     return Response(template, status_code=200, headers={"Content-Type": "text/html; charset=UTF-8", "Access-Control-Allow-Origin": "*"})
-
 
 def render(tpl_path, context):
     path, filename = os.path.split(tpl_path)

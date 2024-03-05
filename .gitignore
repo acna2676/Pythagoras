@@ -1,5 +1,6 @@
 .chalice/deployments/
 .chalice/venv/
+.chalice/.DS_Store
 chalicelib/__init__.py
 
 access_token.txt
