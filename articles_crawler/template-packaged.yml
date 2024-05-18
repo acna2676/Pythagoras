@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: 2010-09-09
+AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Parameters:
   ProjectName:
@@ -43,6 +43,6 @@ Resources:
           Properties:
             Name:
               Fn::Sub: ${ProjectName}-${Environment}-articles_crawler-trigger
-            Schedule: cron(0 * * * ? *)
+            Schedule: cron(0 */6 * * ? *)
     Metadata:
       SamResourceId: pythagorasArticleCrawler

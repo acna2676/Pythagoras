@@ -39,4 +39,4 @@ Resources:
           Type: Schedule 
           Properties:
             Name: !Sub ${ProjectName}-${Environment}-articles_crawler-trigger
-            Schedule: cron(0 * * * ? *)
+            Schedule: cron(0 */6 * * ? *)
